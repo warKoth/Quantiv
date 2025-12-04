@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 from datetime import datetime, timedelta
+import Main
 
 
 class StatisticsWindow:
@@ -16,6 +17,8 @@ class StatisticsWindow:
         """
         self.root = root
         self.db = db_manager
+        
+        
         
         # Configuration de la fenêtre
         self.root.title("Quantiv - Analyse Statistique")
@@ -61,7 +64,7 @@ class StatisticsWindow:
         menubar.add_cascade(label="Analyse", menu=analysis_menu)
         analysis_menu.add_command(label="Statistiques globales", command=self.show_global_stats)
         analysis_menu.add_command(label="Comparaison groupes", command=self.compare_groups)
-        analysis_menu.add_command(label="Tendances temporelles", command=self.show_trends)
+        analysis_menu.add_command(label="Ajouter des chiffres de reference", command=self.show_trends)
         
         # Menu Aide
         help_menu = tk.Menu(menubar, tearoff=0)
@@ -71,8 +74,9 @@ class StatisticsWindow:
         
     def create_main_interface(self):
         """Crée l'interface principale avec onglets"""
+
         # Frame principal avec padding
-        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame = ttk.Frame(self.root, padding="5")
         main_frame.pack(fill='both', expand=True)
         
         # Notebook pour les onglets
@@ -94,7 +98,7 @@ class StatisticsWindow:
     def create_entrees_tab(self):
         """Crée l'onglet d'analyse des entrées individuelles"""
         entree_frame = ttk.Frame(self.notebook)
-        self.notebook.add(entree_frame, text="📊 Entrées Individuelles")
+        self.notebook.add(entree_frame, text=" Entrées Individuelles")
         
         # Frame supérieur - Recherche et filtres
         top_frame = ttk.LabelFrame(entree_frame, text="Recherche et Filtres", padding="10")
@@ -104,7 +108,7 @@ class StatisticsWindow:
         search_frame = ttk.Frame(top_frame)
         search_frame.pack(fill='x', pady=5)
         
-        ttk.Label(search_frame, text="🔍 Rechercher:").pack(side='left', padx=5)
+        ttk.Label(search_frame, text=" Rechercher:").pack(side='left', padx=5)
         self.entree_search_var = tk.StringVar()
         self.entree_search_var.trace('w', lambda *args: self.search_entrees())
         ttk.Entry(search_frame, textvariable=self.entree_search_var, width=40).pack(side='left', padx=5)
@@ -191,13 +195,13 @@ class StatisticsWindow:
         action_frame = ttk.Frame(entree_frame)
         action_frame.pack(fill='x', padx=5, pady=5)
         
-        ttk.Button(action_frame, text="➕ Nouvelle Entrée", 
+        ttk.Button(action_frame, text=" Nouvelle Entrée", 
                   command=self.add_entree).pack(side='left', padx=5)
-        ttk.Button(action_frame, text="✏️ Modifier", 
+        ttk.Button(action_frame, text=" Modifier", 
                   command=self.edit_entree).pack(side='left', padx=5)
-        ttk.Button(action_frame, text="🗑️ Supprimer", 
+        ttk.Button(action_frame, text=" Supprimer", 
                   command=self.delete_entree).pack(side='left', padx=5)
-        ttk.Button(action_frame, text="📈 Voir Graphiques", 
+        ttk.Button(action_frame, text=" Voir Graphiques", 
                   command=self.show_entree_charts).pack(side='left', padx=5)
         ttk.Button(action_frame, text="📄 Générer Rapport", 
                   command=self.generate_entree_report).pack(side='right', padx=5)
@@ -205,13 +209,13 @@ class StatisticsWindow:
     def create_groupes_tab(self):
         """Crée l'onglet d'analyse des groupes"""
         groupe_frame = ttk.Frame(self.notebook)
-        self.notebook.add(groupe_frame, text="👥 Groupes")
+        self.notebook.add(groupe_frame, text=" Groupes")
         
         # Frame supérieur - Recherche
         top_frame = ttk.LabelFrame(groupe_frame, text="Recherche", padding="10")
         top_frame.pack(fill='x', padx=5, pady=5)
         
-        ttk.Label(top_frame, text="🔍 Rechercher:").pack(side='left', padx=5)
+        ttk.Label(top_frame, text=" Rechercher:").pack(side='left', padx=5)
         self.groupe_search_var = tk.StringVar()
         self.groupe_search_var.trace('w', lambda *args: self.search_groupes())
         ttk.Entry(top_frame, textvariable=self.groupe_search_var, width=40).pack(side='left', padx=5)
@@ -276,13 +280,13 @@ class StatisticsWindow:
         action_frame = ttk.Frame(groupe_frame)
         action_frame.pack(fill='x', padx=5, pady=5)
         
-        ttk.Button(action_frame, text="➕ Nouveau Groupe", 
+        ttk.Button(action_frame, text=" Nouveau Groupe", 
                   command=self.add_groupe).pack(side='left', padx=5)
-        ttk.Button(action_frame, text="✏️ Modifier", 
+        ttk.Button(action_frame, text=" Modifier", 
                   command=self.edit_groupe).pack(side='left', padx=5)
-        ttk.Button(action_frame, text="🗑️ Supprimer", 
+        ttk.Button(action_frame, text=" Supprimer", 
                   command=self.delete_groupe).pack(side='left', padx=5)
-        ttk.Button(action_frame, text="📊 Voir Distribution", 
+        ttk.Button(action_frame, text=" Voir Graphique", 
                   command=self.show_groupe_distribution).pack(side='left', padx=5)
         ttk.Button(action_frame, text="📄 Générer Rapport", 
                   command=self.generate_groupe_report).pack(side='right', padx=5)
@@ -290,7 +294,7 @@ class StatisticsWindow:
     def create_comparison_tab(self):
         """Crée l'onglet de comparaison"""
         comp_frame = ttk.Frame(self.notebook)
-        self.notebook.add(comp_frame, text="⚖️ Comparaisons")
+        self.notebook.add(comp_frame, text=" Comparaisons")
         
         # Contenu à implémenter
         ttk.Label(comp_frame, text="Outil de comparaison entre entrées et groupes", 
@@ -313,7 +317,8 @@ class StatisticsWindow:
         style.theme_use('clam')
         
         # Style pour le notebook
-        style.configure('TNotebook.Tab', padding=[20, 10])
+        # Réduire le padding et la police pour raccourcir visuellement les onglets
+        style.configure('TNotebook.Tab', padding=[6, 2], font=('Helvetica', 9))
         
     # Méthodes de gestion des données
     def load_initial_data(self):

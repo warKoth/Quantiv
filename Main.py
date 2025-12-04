@@ -1,6 +1,5 @@
 """Class principal des fenêtres d'analyse statistique."""
 
-import Windows 
 import numpy as np
 import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
