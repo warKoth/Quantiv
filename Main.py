@@ -27,17 +27,22 @@ class Entity(ABC):
 class Individual(Entity):
     """Classe représentant une entrée individuelle."""
 
-    def __init__(self, nom: str, prenom: str, data: List[float]):
+    def __init__(self, nom: str, prenom: str, groupe: str, data: List[float], scores: dict = None):
         """Initialise l'entrée individuelle avec des données.
 
         Args:
             nom (str): Le nom de l'entrée.
             prénom (str): Le prénom de l'entrée.
             data (List[float]): Les données associées à l'entrée.
+            scores (dict): dictionnaire note_name -> valeur (optionnel)
+            data (List[float]): Les données associées à l'entrée.
         """
         super().__init__(nom)
         self.data = data
         self.prenom = prenom
+        # optional per-note scores mapping
+        self.scores = scores or {}
+        self.groupe = groupe
 
     def ajouter_donnée(self, valeur: float):
         """Ajoute une donnée à l'entrée individuelle."""
@@ -98,34 +103,42 @@ class Group(Entity):
             all_data.extend(member.get_data())
         return all_data
 
+
 class StatistiqueAnalysis:
-    """ Classe pour afficher les statistique d'un sujet ou d'un groupe sous forme de graphe araignée. """
+    """Classe pour afficher les statistiques d'un sujet ou d'un groupe sous forme de graphe araignée."""
 
     def __init__(self, entity: Entity):
-        """ Initialise l'analyse statistique pour une entité donnée.
+        """Initialise l'analyse statistique pour une entité donnée.
 
         Args:
             entity (Entity): L'entité (individu ou groupe) à analyser.
         """
         self.entity = entity
 
-    def plot_radar_chart(self):
-        """Permet de tracer un graphique radar des données de l'entité."""
+    def plot_radar_chart(self, labels=None):
         data = self.entity.get_data()
         if not data:
-            print("Aucune donnée disponible pour l'entité.")
+            print("Aucune donnée disponible.")
             return
-        
+    
         num_vars = len(data)
-        angles = np.linspace(0, 2 * np.pi , num_vars, endpoint=False).tolist()
-        data += data[:1]
+        angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+        data_plot = data + data[:1]
         angles += angles[:1]
+    
         fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
-        ax.fill(angles, data, color='blue', alpha=0.25)
-        ax.plot(angles, data, color='blue', linewidth=2)
+        ax.fill(angles, data_plot, color='blue', alpha=0.25)
+        ax.plot(angles, data_plot, color='blue', linewidth=2)
         ax.set_yticklabels([])
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels([f'Var {i+1}' for i in range(num_vars)])
+    
+        # Utiliser des labels personnalisés si fournis
+        if labels and len(labels) == num_vars:
+            ax.set_xticklabels(labels)
+        else:
+            ax.set_xticklabels([f'Note {i+1}' for i in range(num_vars)])
+    
         plt.title(f'Graphique Radar pour {self.entity.nom}')
         plt.show()
+
 

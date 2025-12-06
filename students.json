@@ -1,0 +1,12 @@
+[
+  {
+    "nom": "Nathan",
+    "prenom": "Nathan",
+    "groupe": "T01",
+    "scores": {
+      "math": 12.0,
+      "Francais": 13.0,
+      "Arts": 12.0
+    }
+  }
+]
