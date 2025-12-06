@@ -44,10 +44,7 @@ class StatisticsWindow:
     def apply_styles(self):
         """Applique un style compact pour les onglets et le thème."""
         style = ttk.Style()
-        try:
-            style.theme_use('clam')
-        except Exception:
-            pass
+        
 
         # Raccourcir visuellement les onglets
         style.configure('TNotebook.Tab', padding=[6, 2], font=('Helvetica', 9))
